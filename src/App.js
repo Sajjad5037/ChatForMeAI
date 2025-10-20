@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 
 // --- Components ---
 import AdminPanel from "./components/AdminPage";
@@ -7,22 +13,8 @@ import AddDoctor from "./components/AddDoctorPage";
 import EditDoctor from "./components/EditDoctorPage";
 import ViewDoctors from "./components/ViewDoctors";
 import DeleteDoctor from "./components/DeleteDoctor";
-import Syllabus from "./components/Syllabus";
-import AI_evaluator from "./components/AI_evaluator";
-import Ai_Learning from "./components/Ai_Learning";
-import AiAvatar from "./components/AiAvatar";
-import StudentReport from "./components/StudentReport";
-import StudentUsageReport from "./components/StudentUsageReport";
-import UserUsageDashboard from "./components/UserUsageDashboard";
-import AiAudioLearning from "./components/AiAudioLearning";
-import ResponseAnalyzer from "./components/ResponseAnalyzer";
-import StudentDashboard from "./components/StudentDashboard";
-import SyllabusManager from "./components/SyllabusManager";
-import Syllabus_new from "./components/Syllabus_new";
+import ChatbotTraining from "./components/ChatbotTraining"; // ✅ new component
 
-
-
- 
 // --- Login Page ---
 function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
   const [username, setUsername] = useState("");
@@ -51,12 +43,11 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
         setSessionToken(data.session_token || null);
         setError(null);
 
+        // ✅ Navigation logic
         if (data?.id === 1) {
           navigate("/AdminPanel");
-        } else if (data?.specialization === "sociology") {
-          navigate("/StudentDashboard");
-        } else if (data?.specialization === "ibne_sina_admin") {
-          navigate("/SyllabusManager");
+        } else if (data?.specialization === "chatbot") {
+          navigate("/ChatbotTraining");
         } else {
           navigate("/"); // fallback
         }
@@ -86,8 +77,10 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
           onChange={(e) => setPassword(e.target.value)}
           style={styles.input}
         />
-        <div style={{ display: "flex", justifyContent: "center", gap: "10px", marginTop: "10px" }}>
-          <button onClick={handleLogin} style={styles.button}>Login</button>
+        <div style={styles.buttonRow}>
+          <button onClick={handleLogin} style={styles.button}>
+            Login
+          </button>
         </div>
         {error && <p style={styles.error}>{error}</p>}
       </div>
@@ -102,87 +95,51 @@ function App() {
   const [sessionToken, setSessionToken] = useState(null);
 
   useEffect(() => {
-    document.title = "Class Management System";
+    document.title = "ChatForMe AI - Business Chatbot";
   }, []);
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setDoctorData={setDoctorData} setSessionToken={setSessionToken} />} />
-
-        {/* Admin Routes */}
-        <Route path="/AdminPanel" element={isLoggedIn ? <AdminPanel /> : <Navigate to="/" />} />
-        <Route path="/add-doctor" element={isLoggedIn ? <AddDoctor /> : <Navigate to="/" />} />
-        <Route path="/edit-doctor" element={isLoggedIn ? <EditDoctor /> : <Navigate to="/" />} />
-        <Route path="/view-doctors" element={isLoggedIn ? <ViewDoctors /> : <Navigate to="/" />} />
-        <Route path="/delete-doctor" element={isLoggedIn ? <DeleteDoctor /> : <Navigate to="/" />} />
-        <Route path="/UserUsageDashboard" element={isLoggedIn ? <UserUsageDashboard /> : <Navigate to="/" />} />
+        {/* Login */}
         <Route
-          path="/SyllabusManager"
-          element={isLoggedIn ? <SyllabusManager doctorData={doctorData} /> : <Navigate to="/" />}
+          path="/"
+          element={
+            <LoginPage
+              setIsLoggedIn={setIsLoggedIn}
+              setDoctorData={setDoctorData}
+              setSessionToken={setSessionToken}
+            />
+          }
         />
 
-        
-
-        {/* Sociology Chatbot */}
+        {/* Admin Routes */}
         <Route
-          path="/StudentDashboard/*"   // hypothetical subdomain-like namespace
-          element={
-            isLoggedIn ? (
-              <StudentDashboard doctorData={doctorData} />
-            ) : (
-              <Navigate to="/" />
-            )
-          }
-        >
-          <Route
-            index
-            element={
-              <div>
-                Welcome to the Student Dashboard. Choose an option from the links above.
-              </div>
-            }
-          />
-          <Route
-            path="Syllabus"
-            element={<Syllabus_new doctorData={doctorData} />}
-          />
-          
-          <Route
-            path="ai_evaluator"
-            element={<AI_evaluator doctorData={doctorData} />}
-          />
-          <Route
-            path="Ai_Learning"
-            element={<Ai_Learning doctorData={doctorData} />}
-          />
-          <Route
-            path="AiAvatar"
-            element={<AiAvatar doctorData={doctorData} />}
-          />
-          <Route
-            path="StudentReport"
-            element={<StudentReport doctorData={doctorData} />}
-          />
-          <Route
-            path="StudentUsageReport"
-            element={<StudentUsageReport doctorData={doctorData} />}
-          />
-          <Route
-            path="UserUsageDashboard"
-            element={<UserUsageDashboard doctorData={doctorData} />}
-          />
-          <Route
-            path="AiAudioLearning"
-            element={<AiAudioLearning doctorData={doctorData} />}
-          />
-          <Route
-            path="ResponseAnalyzer"
-            element={<ResponseAnalyzer doctorData={doctorData} />}
-          />
-                                            
-        </Route>
-          
+          path="/AdminPanel"
+          element={isLoggedIn ? <AdminPanel /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/add-doctor"
+          element={isLoggedIn ? <AddDoctor /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/edit-doctor"
+          element={isLoggedIn ? <EditDoctor /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/view-doctors"
+          element={isLoggedIn ? <ViewDoctors /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/delete-doctor"
+          element={isLoggedIn ? <DeleteDoctor /> : <Navigate to="/" />}
+        />
+
+        {/* ✅ Chatbot Training Route */}
+        <Route
+          path="/ChatbotTraining"
+          element={isLoggedIn ? <ChatbotTraining /> : <Navigate to="/" />}
+        />
       </Routes>
     </Router>
   );
@@ -190,10 +147,37 @@ function App() {
 
 // --- Styles ---
 const styles = {
-  container: { textAlign: "center", marginTop: "50px", padding: "20px", fontFamily: "Arial, sans-serif", minHeight: "100vh", backgroundColor: "#f4f4f4" },
-  loginBox: { backgroundColor: "#fff", padding: "20px", borderRadius: "8px", boxShadow: "0px 4px 10px rgba(0,0,0,0.1)", display: "inline-block" },
-  input: { padding: "10px", margin: "10px", width: "80%", borderRadius: "5px", border: "1px solid #ccc" },
-  button: { padding: "10px 20px", backgroundColor: "#0078D4", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer" },
+  container: {
+    textAlign: "center",
+    marginTop: "50px",
+    padding: "20px",
+    fontFamily: "Arial, sans-serif",
+    minHeight: "100vh",
+    backgroundColor: "#f4f4f4",
+  },
+  loginBox: {
+    backgroundColor: "#fff",
+    padding: "20px",
+    borderRadius: "8px",
+    boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+    display: "inline-block",
+  },
+  input: {
+    padding: "10px",
+    margin: "10px",
+    width: "80%",
+    borderRadius: "5px",
+    border: "1px solid #ccc",
+  },
+  button: {
+    padding: "10px 20px",
+    backgroundColor: "#0078D4",
+    color: "#fff",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  buttonRow: { display: "flex", justifyContent: "center", gap: "10px", marginTop: "10px" },
   error: { color: "red", fontSize: "14px" },
 };
 

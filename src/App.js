@@ -1,184 +1,112 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-// --- Components ---
-import AdminPanel from "./components/AdminPage";
-import AddDoctor from "./components/AddDoctorPage";
-import EditDoctor from "./components/EditDoctorPage";
-import ViewDoctors from "./components/ViewDoctors";
-import DeleteDoctor from "./components/DeleteDoctor";
-import ChatbotTraining from "./components/ChatbotTraining"; // ✅ new component
-
-// --- Login Page ---
-function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-  const server = "https://web-production-e5ae.up.railway.app";
-
-  const handleLogin = async () => {
-    try {
-      setIsLoggedIn(false);
-      setDoctorData(null);
-
-      const response = await fetch(`${server}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setIsLoggedIn(true);
-        setDoctorData(data);
-        setSessionToken(data.session_token || null);
-        setError(null);
-
-        // ✅ Navigation logic
-        if (data?.id === 1) {
-          navigate("/AdminPanel");
-        } else if (data?.specialization === "chatbot") {
-          navigate("/ChatbotTraining");
-        } else {
-          navigate("/"); // fallback
-        }
-      } else {
-        setError(data.error || "Invalid credentials");
-      }
-    } catch (err) {
-      setError("Failed to login");
-    }
-  };
-
+function Navbar() {
   return (
-    <div style={styles.container}>
-      <div style={styles.loginBox}>
-        <h2>Login</h2>
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={styles.input}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-        <div style={styles.buttonRow}>
-          <button onClick={handleLogin} style={styles.button}>
-            Login
-          </button>
+    <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
+      <h1 className="text-xl font-bold">ChatForMe.ai</h1>
+      <div className="space-x-4">
+        <Link to="/" className="hover:text-blue-400">Home</Link>
+        <Link to="/features" className="hover:text-blue-400">Features</Link>
+        <Link to="/pricing" className="hover:text-blue-400">Pricing</Link>
+        <Link to="/login" className="hover:text-blue-400">Login</Link>
+        <Link to="/signup" className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Get Started</Link>
+      </div>
+    </nav>
+  );
+}
+
+function Home() {
+  return (
+    <section className="text-center mt-20 px-6">
+      <h2 className="text-4xl font-bold mb-4">Your AI Chatbot for WhatsApp and Web</h2>
+      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        Let your chatbot handle customer queries when you’re offline — trained on your own business data.
+      </p>
+      <button className="mt-6 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
+        Get Started Free
+      </button>
+    </section>
+  );
+}
+
+function Features() {
+  return (
+    <div className="p-10">
+      <h2 className="text-3xl font-bold mb-6">Features</h2>
+      <ul className="space-y-4 text-gray-700">
+        <li>🤖 Train your chatbot with your business PDF.</li>
+        <li>💬 Answer clients on WhatsApp or a shareable chat link.</li>
+        <li>📊 Dashboard to monitor chats and update content anytime.</li>
+        <li>🌍 Works 24/7 for your business.</li>
+      </ul>
+    </div>
+  );
+}
+
+function Pricing() {
+  return (
+    <div className="p-10">
+      <h2 className="text-3xl font-bold mb-6">Pricing</h2>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="border p-6 rounded-lg text-center shadow">
+          <h3 className="text-xl font-bold mb-2">Free</h3>
+          <p className="mb-4">Basic chatbot with limited training data.</p>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded">Try Now</button>
         </div>
-        {error && <p style={styles.error}>{error}</p>}
+        <div className="border p-6 rounded-lg text-center shadow">
+          <h3 className="text-xl font-bold mb-2">Pro</h3>
+          <p className="mb-4">WhatsApp + Web Chatbot + 24/7 Support.</p>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded">Upgrade</button>
+        </div>
+        <div className="border p-6 rounded-lg text-center shadow">
+          <h3 className="text-xl font-bold mb-2">Enterprise</h3>
+          <p className="mb-4">Full customization + API access.</p>
+          <button className="bg-blue-500 text-white px-4 py-2 rounded">Contact Us</button>
+        </div>
       </div>
     </div>
   );
 }
 
-// --- App ---
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [doctorData, setDoctorData] = useState(null);
-  const [sessionToken, setSessionToken] = useState(null);
+function Login() {
+  return (
+    <div className="max-w-md mx-auto mt-20 border p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
+      <form className="flex flex-col space-y-4">
+        <input className="border px-3 py-2 rounded" placeholder="Email" />
+        <input className="border px-3 py-2 rounded" type="password" placeholder="Password" />
+        <button className="bg-blue-500 text-white py-2 rounded">Login</button>
+      </form>
+    </div>
+  );
+}
 
-  useEffect(() => {
-    document.title = "ChatForMe AI - Business Chatbot";
-  }, []);
+function Signup() {
+  return (
+    <div className="max-w-md mx-auto mt-20 border p-6 rounded-lg shadow">
+      <h2 className="text-2xl font-bold mb-4 text-center">Create Account</h2>
+      <form className="flex flex-col space-y-4">
+        <input className="border px-3 py-2 rounded" placeholder="Name" />
+        <input className="border px-3 py-2 rounded" placeholder="Email" />
+        <input className="border px-3 py-2 rounded" placeholder="Business Name" />
+        <input className="border px-3 py-2 rounded" type="password" placeholder="Password" />
+        <button className="bg-blue-500 text-white py-2 rounded">Sign Up</button>
+      </form>
+    </div>
+  );
+}
 
+export default function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
-        {/* Login */}
-        <Route
-          path="/"
-          element={
-            <LoginPage
-              setIsLoggedIn={setIsLoggedIn}
-              setDoctorData={setDoctorData}
-              setSessionToken={setSessionToken}
-            />
-          }
-        />
-
-        {/* Admin Routes */}
-        <Route
-          path="/AdminPanel"
-          element={isLoggedIn ? <AdminPanel /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/add-doctor"
-          element={isLoggedIn ? <AddDoctor /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/edit-doctor"
-          element={isLoggedIn ? <EditDoctor /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/view-doctors"
-          element={isLoggedIn ? <ViewDoctors /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/delete-doctor"
-          element={isLoggedIn ? <DeleteDoctor /> : <Navigate to="/" />}
-        />
-
-        {/* ✅ Chatbot Training Route */}
-        <Route
-          path="/ChatbotTraining"
-          element={isLoggedIn ? <ChatbotTraining /> : <Navigate to="/" />}
-        />
+        <Route path="/" element={<Home />} />
+        <Route path="/features" element={<Features />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );
 }
-
-// --- Styles ---
-const styles = {
-  container: {
-    textAlign: "center",
-    marginTop: "50px",
-    padding: "20px",
-    fontFamily: "Arial, sans-serif",
-    minHeight: "100vh",
-    backgroundColor: "#f4f4f4",
-  },
-  loginBox: {
-    backgroundColor: "#fff",
-    padding: "20px",
-    borderRadius: "8px",
-    boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
-    display: "inline-block",
-  },
-  input: {
-    padding: "10px",
-    margin: "10px",
-    width: "80%",
-    borderRadius: "5px",
-    border: "1px solid #ccc",
-  },
-  button: {
-    padding: "10px 20px",
-    backgroundColor: "#0078D4",
-    color: "#fff",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-  },
-  buttonRow: { display: "flex", justifyContent: "center", gap: "10px", marginTop: "10px" },
-  error: { color: "red", fontSize: "14px" },
-};
-
-export default App;

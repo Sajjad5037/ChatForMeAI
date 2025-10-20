@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-
+ 
 function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">

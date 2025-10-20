@@ -96,7 +96,7 @@ function Signup() {
   );
 }
 
-export default function App() {
+export default function App_new() {
   return (
     <Router>
       <Navbar />

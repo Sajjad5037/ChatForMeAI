@@ -11,7 +11,7 @@ import DashboardPage from "./DashboardPage";
 
 
 
-function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
+function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken, setRole }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -21,37 +21,33 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
   // const server = "http://localhost:3000";
 
   const handleLogin = async () => {
-    try {
-      setIsLoggedIn(false);
-      setDoctorData(null);
+  try {
+    setIsLoggedIn(false);
+    setDoctorData(null);
 
-      const response = await fetch(`${server}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
+    const response = await fetch(`${server}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username, password }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok) {
-        setIsLoggedIn(true);
-        setDoctorData(data);
-        setSessionToken(data.session_token || null);
-        setError(null);
+    if (response.ok) {
+      setIsLoggedIn(true);
+      setDoctorData(data);
+      setSessionToken(data.session_token || null);
 
-        if (data?.id === 1) {
-          navigate("/AdminPanel");
-        } else {
-          navigate("/dashboard");
-        }
-      } else {
-        setError(data.error || "Invalid credentials");
-      }
-    } catch (err) {
-      setError("Failed to login");
+      // determine role based on backend response
+      setRole(data?.id === 1 ? "admin" : "doctor");
+    } else {
+      setError(data.error || "Invalid credentials");
     }
-  };
+  } catch (err) {
+    setError("Failed to login");
+  }
+};
 
   const handleSignUp = () => navigate("/signup");
 

@@ -18,21 +18,21 @@ import DeleteDoctor from "./DeleteDoctor";
 function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const server = "https://krishbackend-production.up.railway.app";
 
-  // --- Handle Login ---
   const handleLogin = async () => {
+    setError("");
+
+    if (!username || !password) {
+      setError("Please enter both username and password.");
+      return;
+    }
+
     try {
-      setError(null);
-
-      if (!username || !password) {
-        setError("Please enter both username and password.");
-        return;
-      }
-
-      console.log("[INFO] Attempting password login:", username);
+      console.log("[INFO] Logging in:", username);
 
       const response = await fetch(`${server}/login`, {
         method: "POST",
@@ -49,24 +49,22 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
         setDoctorData(data);
         setSessionToken(data.session_token || null);
 
-        if (data?.name === "Admin") {
-          navigate("/AdminPanel");
-        } else {
-          navigate("/view-doctors");
-        }
+        // Redirect based on role
+        if (data?.name === "Admin") navigate("/admin");
+        else navigate("/view-doctors");
       } else {
         setError(data.detail || "Invalid username or password.");
       }
     } catch (err) {
       console.error("[ERROR] Login failed:", err);
-      setError("An unexpected error occurred. Please try again.");
+      setError("Something went wrong. Please try again.");
     }
   };
 
   return (
     <div style={styles.container}>
-      <div style={styles.loginBox}>
-        <h2 style={styles.heading}>Login</h2>
+      <div style={styles.card}>
+        <h2 style={styles.title}>Clinic Login</h2>
 
         <input
           type="text"
@@ -96,7 +94,7 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
 
 // --- Private Route Wrapper ---
 const PrivateRoute = ({ isLoggedIn, children }) => {
-  return isLoggedIn ? children : <Navigate to="/" />;
+  return isLoggedIn ? children : <Navigate to="/" replace />;
 };
 
 // --- Main App ---
@@ -124,12 +122,12 @@ function App() {
           }
         />
 
-        {/* Admin Routes */}
+        {/* Protected Routes */}
         <Route
-          path="/AdminPanel"
+          path="/admin"
           element={
             <PrivateRoute isLoggedIn={isLoggedIn}>
-              <AdminPanel />
+              <AdminPanel doctorData={doctorData} />
             </PrivateRoute>
           }
         />
@@ -177,43 +175,48 @@ const styles = {
     justifyContent: "center",
     alignItems: "center",
     height: "100vh",
-    background: "#f0f2f5",
+    background: "#f8fafc",
   },
-  loginBox: {
-    padding: "30px",
-    borderRadius: "8px",
+  card: {
     background: "#fff",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    padding: "2rem",
+    borderRadius: "12px",
+    boxShadow: "0 6px 20px rgba(0,0,0,0.1)",
     textAlign: "center",
-    minWidth: "320px",
+    width: "100%",
+    maxWidth: "360px",
   },
-  heading: {
-    marginBottom: "20px",
-    fontSize: "24px",
-    color: "#333",
+  title: {
+    fontSize: "26px",
+    marginBottom: "1.5rem",
+    color: "#1e293b",
+    fontWeight: "600",
   },
   input: {
     width: "100%",
-    padding: "10px",
-    margin: "10px 0",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
+    padding: "12px",
+    margin: "8px 0",
+    borderRadius: "6px",
+    border: "1px solid #cbd5e1",
     fontSize: "16px",
+    outline: "none",
   },
   button: {
     width: "100%",
-    padding: "10px",
-    marginTop: "10px",
-    borderRadius: "4px",
+    padding: "12px",
+    marginTop: "12px",
+    borderRadius: "6px",
     border: "none",
-    background: "#007bff",
+    background: "#2563eb",
     color: "#fff",
-    cursor: "pointer",
     fontSize: "16px",
+    cursor: "pointer",
+    fontWeight: "500",
   },
   error: {
-    color: "red",
     marginTop: "10px",
+    color: "#ef4444",
+    fontSize: "14px",
   },
 };
 

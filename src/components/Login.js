@@ -1,15 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-
-import AdminPanel from "./AdminPage";
-import AddDoctor from "./AddDoctorPage";
-import EditDoctor from "./EditDoctorPage";
-import ViewDoctors from "./ViewDoctors";
-import DeleteDoctor from "./DeleteDoctor";
-import DashboardPage from "./DashboardPage";
-
-
-
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken, setRole }) {
   const [username, setUsername] = useState("");
@@ -21,33 +11,40 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken, setRole }) {
   // const server = "http://localhost:3000";
 
   const handleLogin = async () => {
-  try {
-    setIsLoggedIn(false);
-    setDoctorData(null);
+    try {
+      setIsLoggedIn(false);
+      setDoctorData(null);
 
-    const response = await fetch(`${server}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ username, password }),
-    });
+      const response = await fetch(`${server}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.ok) {
-      setIsLoggedIn(true);
-      setDoctorData(data);
-      setSessionToken(data.session_token || null);
+      if (response.ok) {
+        // Set global states
+        setIsLoggedIn(true);
+        setDoctorData(data);
+        setSessionToken(data.session_token || null);
 
-      // determine role based on backend response
-      setRole(data?.id === 1 ? "admin" : "doctor");
-    } else {
-      setError(data.error || "Invalid credentials");
+        // Determine role based on backend response
+        const userRole = data?.id === 1 ? "admin" : "doctor";
+        setRole(userRole);
+
+        // Navigate based on role
+        if (userRole === "admin") navigate("/AdminPanel");
+        else navigate("/dashboard");
+      } else {
+        setError(data.error || "Invalid credentials");
+      }
+    } catch (err) {
+      setError("Failed to login. Please try again.");
+      console.error(err);
     }
-  } catch (err) {
-    setError("Failed to login");
-  }
-};
+  };
 
   const handleSignUp = () => navigate("/signup");
 
@@ -79,42 +76,6 @@ function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken, setRole }) {
   );
 }
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [doctorData, setDoctorData] = useState(null);
-  const [sessionToken, setSessionToken] = useState(null);
-
-  useEffect(() => {
-    document.title = "Class Management System";
-  }, []);
-
-  return (
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={<LoginPage setIsLoggedIn={setIsLoggedIn} setDoctorData={setDoctorData} setSessionToken={setSessionToken} />}
-        />
-        <Route
-          path="/dashboard"
-          element={
-            (!isLoggedIn || !sessionToken) ? <Navigate to="/" /> : <DashboardPage />
-          }
-        />
-        <Route
-          path="/AdminPanel"
-          element={isLoggedIn ? <AdminPanel /> : <Navigate to="/" />}
-        />
-        <Route path="/add-doctor" element={<AddDoctor />} />
-        <Route path="/edit-doctor" element={<EditDoctor />} />
-        <Route path="/view-doctors" element={<ViewDoctors />} />
-        <Route path="/delete-doctor" element={<DeleteDoctor />} />
-        
-      </Routes>
-    </Router>
-  );
-}
-
 const styles = {
   container: {
     textAlign: "center",
@@ -127,7 +88,7 @@ const styles = {
   loginBox: {
     backgroundColor: "#ffffff",
     padding: "20px",
-    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
     borderRadius: "8px",
     display: "inline-block",
     marginTop: "20px",
@@ -154,4 +115,4 @@ const styles = {
   },
 };
 
-export default App;
+export default LoginPage;

@@ -7,6 +7,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 function DashboardPage({ setIsLoggedIn, doctorData }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [shareableUrl, setShareableUrl] = useState("Fetching URL...");
   const server="https://web-production-e5ae.up.railway.app"
   //const server = "http://localhost:3000"
   const sessionToken = doctorData?.session_token
@@ -413,9 +414,33 @@ function DashboardPage({ setIsLoggedIn, doctorData }) {
   
   
 // Define shareableUrl using fetched publicToken
-const shareableUrl = publicToken && sessionToken
-  ? `${window.location.origin}/dashboard?publicToken=${publicToken}&sessionToken=${sessionToken}`
-  : "Fetching URL...";
+
+
+useEffect(() => {
+  if (!publicToken || !sessionToken) return;
+
+  const url = `${window.location.origin}/dashboard?publicToken=${publicToken}&sessionToken=${sessionToken}`;
+  setShareableUrl(url); // update state so UI re-renders
+  console.log("Shareable URL ready:", url);
+
+  const fetchQRCode = async () => {
+    try {
+      const qrCodeUrl = `https://web-production-e5ae.up.railway.app/generate-qr/${publicToken}/${sessionToken}`;
+      const response = await fetch(qrCodeUrl);
+
+      if (!response.ok) throw new Error("Failed to fetch QR code");
+
+      const blob = await response.blob();
+      const qrCodeImageUrl = URL.createObjectURL(blob);
+      setQrCodeUrl(qrCodeImageUrl);
+    } catch (err) {
+      console.error("Error fetching QR code:", err);
+    }
+  };
+
+  fetchQRCode();
+}, [publicToken, sessionToken]);
+
 
 return (
   <div style={styles.container}>

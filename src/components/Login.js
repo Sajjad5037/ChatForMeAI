@@ -13,9 +13,6 @@ import AddDoctor from "./AddDoctorPage";
 import EditDoctor from "./EditDoctorPage";
 import ViewDoctors from "./ViewDoctors";
 import DeleteDoctor from "./DeleteDoctor";
-import DemoChatbot from "./DemoChatbot";
-import UsageDashboard from "./UsageDashboard";
-import ChatbotSettings from "./ChatbotSettings";
 
 
 

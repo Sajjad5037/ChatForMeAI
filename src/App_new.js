@@ -8,12 +8,12 @@ import Pricing from "./components/Pricing";
 import Signup from "./components/Signup";
 import LoginPage from "./components/Login";
 
-import AdminPanel from "./AdminPage";
-import DashboardPage from "./DashboardPage";
-import AddDoctor from "./AddDoctorPage";
-import EditDoctor from "./EditDoctorPage";
-import ViewDoctors from "./ViewDoctors";
-import DeleteDoctor from "./DeleteDoctor";
+import AdminPanel from "./components/AdminPage";
+import DashboardPage from "./components/DashboardPage";
+import AddDoctor from "./components/AddDoctorPage";
+import EditDoctor from "./components/EditDoctorPage";
+import ViewDoctors from "./components/ViewDoctors";
+import DeleteDoctor from "./components/DeleteDoctor";
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

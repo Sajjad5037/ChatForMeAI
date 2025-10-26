@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";  
-import Login from "./components/Login";
+import LoginPage from "./components/Login";
 function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -14,6 +14,7 @@ function Navbar() {
     </nav>
   );
 }
+
 
 function Home() {
   return (
@@ -92,7 +93,7 @@ export default function App_new() {
         <Route path="/" element={<Home />} />
         <Route path="/features" element={<Features />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>

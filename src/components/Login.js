@@ -13,7 +13,7 @@ import AddDoctor from "./AddDoctorPage";
 import EditDoctor from "./EditDoctorPage";
 import ViewDoctors from "./ViewDoctors";
 import DeleteDoctor from "./DeleteDoctor";
-import DashboardPage from "./components/DashboardPage"
+import DashboardPage from "./DashboardPage"
 // --- Login Page ---
 function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
   const [username, setUsername] = useState("");

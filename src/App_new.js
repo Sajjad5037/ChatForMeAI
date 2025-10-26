@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";   
+import { Routes, Route, Link } from "react-router-dom";   
 import LoginPage from "./components/Login";
+
 function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -9,13 +10,11 @@ function Navbar() {
         <Link to="/features" className="hover:text-blue-400">Features</Link>
         <Link to="/pricing" className="hover:text-blue-400">Pricing</Link>
         <Link to="/login" className="hover:text-blue-400">Login</Link>
-        
         <Link to="/signup" className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Get Started</Link>
       </div>
     </nav>
   );
 }
-
 
 function Home() {
   return (
@@ -70,7 +69,6 @@ function Pricing() {
   );
 }
 
-
 function Signup() {
   return (
     <div className="max-w-md mx-auto mt-20 border p-6 rounded-lg shadow">
@@ -88,7 +86,7 @@ function Signup() {
 
 export default function App_new() {
   return (
-    <Router>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -97,6 +95,6 @@ export default function App_new() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
-    </Router>
+    </>
   );
 }

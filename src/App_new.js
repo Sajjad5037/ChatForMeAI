@@ -1,99 +1,78 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";   
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+import Navbar from "./Navbar"; // your Navbar component
+import Home from "./Home";
+import Features from "./Features";
+import Pricing from "./Pricing";
+import Signup from "./Signup";
 import LoginPage from "./components/Login";
 
-function Navbar() {
-  return (
-    <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">ChatForMe.ai</h1>
-      <div className="space-x-4">
-        <Link to="/" className="hover:text-blue-400">Home</Link>
-        <Link to="/features" className="hover:text-blue-400">Features</Link>
-        <Link to="/pricing" className="hover:text-blue-400">Pricing</Link>
-        <Link to="/login" className="hover:text-blue-400">Login</Link>
-        <Link to="/signup" className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Get Started</Link>
-      </div>
-    </nav>
-  );
-}
+import AdminPanel from "./AdminPage";
+import DashboardPage from "./DashboardPage";
+import AddDoctor from "./AddDoctorPage";
+import EditDoctor from "./EditDoctorPage";
+import ViewDoctors from "./ViewDoctors";
+import DeleteDoctor from "./DeleteDoctor";
 
-function Home() {
-  return (
-    <section className="text-center mt-20 px-6">
-      <h2 className="text-4xl font-bold mb-4">Your AI Chatbot for WhatsApp and Web</h2>
-      <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-        Let your chatbot handle customer queries when you’re offline — trained on your own business data.
-      </p>
-      <button className="mt-6 bg-blue-500 text-white px-6 py-3 rounded hover:bg-blue-600">
-        Get Started Free
-      </button>
-    </section>
-  );
-}
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [doctorData, setDoctorData] = useState(null);
+  const [sessionToken, setSessionToken] = useState(null);
+  const [role, setRole] = useState(null); // admin or doctor
 
-function Features() {
-  return (
-    <div className="p-10">
-      <h2 className="text-3xl font-bold mb-6">Features</h2>
-      <ul className="space-y-4 text-gray-700">
-        <li>🤖 Train your chatbot with your business PDF.</li>
-        <li>💬 Answer clients on WhatsApp or a shareable chat link.</li>
-        <li>📊 Dashboard to monitor chats and update content anytime.</li>
-        <li>🌍 Works 24/7 for your business.</li>
-      </ul>
-    </div>
-  );
-}
+  useEffect(() => {
+    document.title = "Class Management System";
+  }, []);
 
-function Pricing() {
-  return (
-    <div className="p-10">
-      <h2 className="text-3xl font-bold mb-6">Pricing</h2>
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="border p-6 rounded-lg text-center shadow">
-          <h3 className="text-xl font-bold mb-2">Free</h3>
-          <p className="mb-4">Basic chatbot with limited training data.</p>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">Try Now</button>
-        </div>
-        <div className="border p-6 rounded-lg text-center shadow">
-          <h3 className="text-xl font-bold mb-2">Pro</h3>
-          <p className="mb-4">WhatsApp + Web Chatbot + 24/7 Support.</p>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">Upgrade</button>
-        </div>
-        <div className="border p-6 rounded-lg text-center shadow">
-          <h3 className="text-xl font-bold mb-2">Enterprise</h3>
-          <p className="mb-4">Full customization + API access.</p>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded">Contact Us</button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Signup() {
-  return (
-    <div className="max-w-md mx-auto mt-20 border p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-4 text-center">Create Account</h2>
-      <form className="flex flex-col space-y-4">
-        <input className="border px-3 py-2 rounded" placeholder="Name" />
-        <input className="border px-3 py-2 rounded" placeholder="Email" />
-        <input className="border px-3 py-2 rounded" placeholder="Business Name" />
-        <input className="border px-3 py-2 rounded" type="password" placeholder="Password" />
-        <button className="bg-blue-500 text-white py-2 rounded">Sign Up</button>
-      </form>
-    </div>
-  );
-}
-
-export default function App_new() {
   return (
     <Router>
       <Navbar />
       <Routes>
+        {/* Public pages */}
         <Route path="/" element={<Home />} />
         <Route path="/features" element={<Features />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<Signup />} />
+        <Route
+          path="/login"
+          element={
+            <LoginPage
+              setIsLoggedIn={setIsLoggedIn}
+              setDoctorData={setDoctorData}
+              setSessionToken={setSessionToken}
+              setRole={setRole} // pass role setter to LoginPage
+            />
+          }
+        />
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            !isLoggedIn || !sessionToken
+              ? <Navigate to="/login" />
+              : role === "doctor"
+              ? <DashboardPage />
+              : <Navigate to="/AdminPanel" />
+          }
+        />
+
+        <Route
+          path="/AdminPanel"
+          element={
+            !isLoggedIn || !sessionToken
+              ? <Navigate to="/login" />
+              : role === "admin"
+              ? <AdminPanel />
+              : <Navigate to="/dashboard" />
+          }
+        />
+
+        <Route path="/add-doctor" element={<AddDoctor />} />
+        <Route path="/edit-doctor" element={<EditDoctor />} />
+        <Route path="/view-doctors" element={<ViewDoctors />} />
+        <Route path="/delete-doctor" element={<DeleteDoctor />} />
       </Routes>
     </Router>
   );

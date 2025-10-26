@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";  
-  
+import Login from "./components/Login";
 function Navbar() {
   return (
     <nav className="bg-gray-900 text-white p-4 flex justify-between items-center">
@@ -68,18 +68,6 @@ function Pricing() {
   );
 }
 
-function Login() {
-  return (
-    <div className="max-w-md mx-auto mt-20 border p-6 rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-4 text-center">Login</h2>
-      <form className="flex flex-col space-y-4">
-        <input className="border px-3 py-2 rounded" placeholder="Email" />
-        <input className="border px-3 py-2 rounded" type="password" placeholder="Password" />
-        <button className="bg-blue-500 text-white py-2 rounded">Login</button>
-      </form>
-    </div>
-  );
-}
 
 function Signup() {
   return (

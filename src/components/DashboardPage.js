@@ -208,13 +208,31 @@ function DashboardPage({ setIsLoggedIn, doctorData }) {
 
 
   useEffect(() => {
-    if (publicToken && sessionToken) {
-      const shareableUrl = `${window.location.origin}/dashboard?publicToken=${publicToken}&sessionToken=${sessionToken}`;
-      
+    // Only run if both tokens exist
+    if (!publicToken || !sessionToken) return;
   
-      fetchQRCode(shareableUrl); // Call fetchQRCode after it's set
-    }
-  }, [publicToken, sessionToken]); // Runs when tokens are ready
+    // Construct shareable URL dynamically
+    const shareableUrl = `${window.location.origin}/dashboard?publicToken=${publicToken}&sessionToken=${sessionToken}`;
+    console.log("Shareable URL ready:", shareableUrl);
+  
+    const fetchQRCode = async () => {
+      try {
+        const qrCodeUrl = `https://web-production-e5ae.up.railway.app/generate-qr/${publicToken}/${sessionToken}`;
+        const response = await fetch(qrCodeUrl);
+  
+        if (!response.ok) throw new Error("Failed to fetch QR code");
+  
+        const blob = await response.blob();
+        const qrCodeImageUrl = URL.createObjectURL(blob);
+        setQrCodeUrl(qrCodeImageUrl); // ✅ now correctly updates state
+      } catch (err) {
+        console.error("Error fetching QR code:", err);
+      }
+    };
+  
+    fetchQRCode(); // ✅ call fetchQRCode only after tokens are ready
+  }, [publicToken, sessionToken]);
+ // Runs when tokens are ready
   // Update countdown timers
   useEffect(() => {
     if (!patients.length) {

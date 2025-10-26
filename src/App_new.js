@@ -9,7 +9,7 @@ function Navbar() {
         <Link to="/" className="hover:text-blue-400">Home</Link>
         <Link to="/features" className="hover:text-blue-400">Features</Link>
         <Link to="/pricing" className="hover:text-blue-400">Pricing</Link>
-        <Link to="/login" className="hover:text-blue-400">Pricing</Link>
+        <Link to="/login" className="hover:text-blue-400">Login</Link>
         <Link to="/signup" className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600">Get Started</Link>
       </div>
     </nav>

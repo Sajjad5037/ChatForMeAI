@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-import Navbar from "./Navbar"; // your Navbar component
+import Navbar from "./Navbar"; 
 import Home from "./Home";
 import Features from "./Features";
 import Pricing from "./Pricing";

@@ -42,12 +42,10 @@ export default function App() {
         <Route
           path="/login"
           element={
-            <LoginPage
-              setIsLoggedIn={setIsLoggedIn}
-              setDoctorData={setDoctorData}
-              setSessionToken={setSessionToken}
-              setRole={setRole}
-            />
+            (() => {
+              window.location.href = "https://class-management-system-new.web.app/";
+              return null;
+            })()
           }
         />
         <Route

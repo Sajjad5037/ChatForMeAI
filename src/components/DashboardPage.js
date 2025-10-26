@@ -8,6 +8,7 @@ function DashboardPage({ setIsLoggedIn, doctorData }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [shareableUrl, setShareableUrl] = useState("Fetching URL...");
+  const [sessionTokenState, setSessionTokenState] = useState(null);
   const server="https://web-production-e5ae.up.railway.app"
   //const server = "http://localhost:3000"
   const sessionToken = doctorData?.session_token
@@ -42,62 +43,38 @@ function DashboardPage({ setIsLoggedIn, doctorData }) {
   const toggleChat = () => {
     setIsChatOpen(!isChatOpen);
   };
+
+  useEffect(() => {
+  if (doctorData?.session_token) {
+    setSessionTokenState(doctorData.session_token);
+  }
+}, [doctorData]);
+
+// Generate shareable URL and fetch QR code when both tokens are ready
+useEffect(() => {
+  if (!publicToken || !sessionTokenState) return; // Wait for both tokens
+
+  const url = `${window.location.origin}/dashboard?publicToken=${publicToken}&sessionToken=${sessionTokenState}`;
+  setShareableUrl(url); // ✅ Correct URL now set
+  console.log("Shareable URL ready:", url);
+
   const fetchQRCode = async () => {
-    if (!shareableUrl || shareableUrl === "Fetching URL...") {
-      console.error("Shareable URL is not available.");
-      return;
-    }
-  
     try {
-      // Extract publicToken and sessionToken from shareableUrl
-      const url = new URL(shareableUrl);
-      const publicToken = url.searchParams.get("publicToken");
-      const sessionToken = url.searchParams.get("sessionToken");
-  
-      if (!publicToken || !sessionToken) {
-        console.error("Missing tokens in shareable URL.");
-        return;
-      }
-  
-      // Construct the QR code API URL
-      const qrCodeUrl = `https://web-production-e5ae.up.railway.app/generate-qr/${publicToken}/${sessionToken}`;
-  
-      // Fetch the QR code from the backend
+      const qrCodeUrl = `https://web-production-e5ae.up.railway.app/generate-qr/${publicToken}/${sessionTokenState}`;
       const response = await fetch(qrCodeUrl);
-  
-      if (!response.ok) {
-        throw new Error("Failed to fetch QR code");
-      }
-  
+
+      if (!response.ok) throw new Error("Failed to fetch QR code");
+
       const blob = await response.blob();
       const qrCodeImageUrl = URL.createObjectURL(blob);
-      setQrCodeUrl(qrCodeImageUrl); // Assuming you have a state to store the QR code image
-    } catch (error) {
-      console.error("Error fetching QR code:", error);
+      setQrCodeUrl(qrCodeImageUrl);
+    } catch (err) {
+      console.error("Error fetching QR code:", err);
     }
   };
-    const sendMessage = async () => {
-    if (!input.trim()) return;
 
-    const userMessage = { text: input, sender: "user" };
-    setMessages((prevMessages) => [...prevMessages, userMessage]);
-    setInput("");
-
-    try {
-        const response = await fetch("https://web-production-e5ae.up.railway.app/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: input, user_id: doctorId }),
-        });
-
-        const data = await response.json();
-        const botMessage = { text: data.reply, sender: "bot" };
-
-        setMessages((prevMessages) => [...prevMessages, botMessage]);
-    } catch (error) {
-        console.error("Error fetching chatbot response:", error);
-    }
-  };// Function to add a new notice
+  fetchQRCode();
+}, [publicToken, sessionTokenState]);
   
   
 

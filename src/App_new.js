@@ -42,10 +42,17 @@ export default function App() {
         <Route
           path="/login"
           element={
-            (() => {
-              window.location.href = "https://class-management-system-new.web.app/";
-              return null;
-            })()
+            <MainLayout>
+              <div style={{ padding: "2rem", textAlign: "center" }}>
+                <p>
+                  You will be redirected to the external system for login:
+                  <br />
+                  <a href="https://class-management-system-new.web.app/" target="_blank" rel="noopener noreferrer">
+                    Go to Login
+                  </a>
+                </p>
+              </div>
+            </MainLayout>
           }
         />
         <Route

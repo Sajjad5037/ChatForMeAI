@@ -13,7 +13,7 @@ import AddDoctor from "./AddDoctorPage";
 import EditDoctor from "./EditDoctorPage";
 import ViewDoctors from "./ViewDoctors";
 import DeleteDoctor from "./DeleteDoctor";
-
+import DashboardPage from "./components/DashboardPage"
 // --- Login Page ---
 function LoginPage({ setIsLoggedIn, setDoctorData, setSessionToken }) {
   const [username, setUsername] = useState("");
@@ -119,6 +119,21 @@ function App() {
               setDoctorData={setDoctorData}
               setSessionToken={setSessionToken}
             />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            (() => {
+              const urlParams = new URLSearchParams(window.location.search);
+              const publicToken = urlParams.get("publicToken");
+              const SToken = urlParams.get("sessionToken");
+
+              if (publicToken && !SToken) return <Navigate to="/" />;
+              if (isLoggedIn && !SessionToken) return <Navigate to="/" />;
+
+              return <DashboardPage />;
+            })()
           }
         />
 

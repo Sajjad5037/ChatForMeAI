@@ -1,6 +1,6 @@
 import { useState, useEffect,useRef } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import PatientList from "./PatientList"; // Import PatientList component
+
 
 
 

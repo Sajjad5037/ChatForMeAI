@@ -8,14 +8,14 @@ import {
 } from "react-router-dom";
 
 // --- Components ---
-
-import AddDoctor from "./components/AddDoctorPage";
-import EditDoctor from "./components/EditDoctorPage";
-import ViewDoctors from "./components/ViewDoctors";
-import DeleteDoctor from "./components/DeleteDoctor";
-import DemoChatbot from "./components/DemoChatbot";
-import UsageDashboard from "./components/UsageDashboard";
-import ChatbotSettings from "./components/ChatbotSettings";
+import AdminPanel from "./AdminPage";
+import AddDoctor from "./AddDoctorPage";
+import EditDoctor from "./EditDoctorPage";
+import ViewDoctors from "./ViewDoctors";
+import DeleteDoctor from "./DeleteDoctor";
+import DemoChatbot from "./DemoChatbot";
+import UsageDashboard from "./UsageDashboard";
+import ChatbotSettings from "./ChatbotSettings";
 
 
 

@@ -103,6 +103,29 @@ useEffect(() => {
         setNewPatientName(""); // Reset input after sending
     } 
   };
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { text: input, sender: "user" };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setInput("");
+
+    try {
+        const response = await fetch("https://web-production-e5ae.up.railway.app/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: input, user_id: doctorId }),
+        });
+
+        const data = await response.json();
+        const botMessage = { text: data.reply, sender: "bot" };
+
+        setMessages((prevMessages) => [...prevMessages, botMessage]);
+    } catch (error) {
+        console.error("Error fetching chatbot response:", error);
+    }
+  };// Function to add a new notice
+  
   const getSessionTokenFromURL = () => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get("sessionToken"); // Extract sessionToken

@@ -47,7 +47,7 @@ export default function App() {
                 <p>
                   You will be redirected to the external system for login:
                   <br />
-                  <a href="https://class-management-system-new.web.app/" target="_blank" rel="noopener noreferrer">
+                  <a href="https://chat-for-me-ai-login.vercel.app/" target="_blank" rel="noopener noreferrer">
                     Go to Login
                   </a>
                 </p>

@@ -59,7 +59,7 @@ export default function App() {
 
                     <Link
                       to="/signup"
-                      className="inline-block bg-gray-100 text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition"
+                      className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
                     >
                       Sign Up
                     </Link>

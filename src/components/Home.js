@@ -24,7 +24,7 @@ export default function Home() {
         {/* Right Side - Illustration */}
         <div className="flex-1 flex justify-center md:justify-end">
           <img
-            src="/mnt/data/A_digital_screenshot_of_a_website_homepage_for_an_.png"
+            src="https://media.istockphoto.com/id/1454952504/vector/chatbot-customer-service-abstract-concept-vector-illustration.jpg?s=612x612&w=0&k=20&c=47QqdLeONvMAwWOsCXnO7ACKZN5v_iE1PXx9fumLY9Y="
             alt="Chatbot illustration"
             className="w-full max-w-md rounded-lg shadow-lg"
           />

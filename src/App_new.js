@@ -45,10 +45,10 @@ export default function App() {
             <MainLayout>
               <div style={{ padding: "2rem", textAlign: "center" }}>
                 <p>
-                  You will be redirected to the external system for login:
+                  
                   <br />
                   <a href="https://chat-for-me-ai-login.vercel.app/" target="_blank" rel="noopener noreferrer">
-                    Go to Login
+                    Click here to login
                   </a>
                 </p>
               </div>

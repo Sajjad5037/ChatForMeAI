@@ -50,12 +50,12 @@ export default function App() {
                   </p>
 
                   <div className="flex justify-center gap-4 flex-wrap">
-                    <Link
-                      to="/login"
+                    <a
+                      href="https://chat-for-me-ai-login.vercel.app"
                       className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
                     >
                       Login
-                    </Link>
+                    </a>
 
                     <Link
                       to="/signup"

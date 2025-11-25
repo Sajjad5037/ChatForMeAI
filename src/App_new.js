@@ -15,12 +15,12 @@ import EditDoctor from "./components/EditDoctorPage";
 import ViewDoctors from "./components/ViewDoctors";
 import DeleteDoctor from "./components/DeleteDoctor";
 
-// Layout component for pages with Navbar
+// Layout wrapper with full white background
 function MainLayout({ children }) {
   return (
     <>
       <Navbar />
-      <main>{children}</main>
+      <main className="bg-white min-h-screen">{children}</main>
     </>
   );
 }
@@ -43,7 +43,7 @@ export default function App() {
           path="/login"
           element={
             <MainLayout>
-              <section className="bg-white py-20 px-6">
+              <section className="py-20 px-6">
                 <div className="max-w-7xl mx-auto text-center space-y-6">
                   <p className="text-lg text-gray-700">
                     Access your account or create a new one to start using the chatbot.
@@ -69,6 +69,7 @@ export default function App() {
             </MainLayout>
           }
         />
+
         <Route
           path="/"
           element={
@@ -77,6 +78,7 @@ export default function App() {
             </MainLayout>
           }
         />
+
         <Route
           path="/features"
           element={
@@ -85,6 +87,7 @@ export default function App() {
             </MainLayout>
           }
         />
+
         <Route
           path="/pricing"
           element={
@@ -93,6 +96,7 @@ export default function App() {
             </MainLayout>
           }
         />
+
         <Route
           path="/signup"
           element={
@@ -102,27 +106,33 @@ export default function App() {
           }
         />
 
-        {/* Protected routes */}
+        {/* Protected pages */}
         <Route
           path="/dashboard"
           element={
-            !isLoggedIn || !sessionToken
-              ? <Navigate to="/login" />
-              : role === "doctor"
-              ? <DashboardPage />
-              : <Navigate to="/AdminPanel" />
+            !isLoggedIn || !sessionToken ? (
+              <Navigate to="/login" />
+            ) : role === "doctor" ? (
+              <DashboardPage />
+            ) : (
+              <Navigate to="/AdminPanel" />
+            )
           }
         />
+
         <Route
           path="/AdminPanel"
           element={
-            !isLoggedIn || !sessionToken
-              ? <Navigate to="/login" />
-              : role === "admin"
-              ? <AdminPanel />
-              : <Navigate to="/dashboard" />
+            !isLoggedIn || !sessionToken ? (
+              <Navigate to="/login" />
+            ) : role === "admin" ? (
+              <AdminPanel />
+            ) : (
+              <Navigate to="/dashboard" />
+            )
           }
         />
+
         <Route path="/add-doctor" element={<AddDoctor />} />
         <Route path="/edit-doctor" element={<EditDoctor />} />
         <Route path="/view-doctors" element={<ViewDoctors />} />
